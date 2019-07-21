@@ -13,6 +13,12 @@
 # All rights reserved.
 #
 ##
+"""
+Script to archive Slurm jobscripts and job environments.
+
+@author: Andy Georges (Ghent University)
+"""
+import argparse
 import multiprocessing
 import inotify.adapters
 import os
@@ -76,6 +82,14 @@ def processor(queue, archive):
 
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="Slurm job script archival tool", prog="parchive")
+    parser.add_argument("-a", "--archive", help="Location of the job scripts' archive.")
+    parser.add_argument("-s", "--spool", help="Location of the Slurm StateSaveLocation (where the job hash dirs are kept).")
+    parser.add_argument("-p", "--period", help="Archive under a YYYY subdirectory (yearly), YYYYMM (monthly), or YYYYMMDD (daily).")
+    parser.add_argument("-l", "--logfile", help="Log file name.")
+
+    args = parser.parse_args()
 
     pool = multiprocessing.Pool(processes=12)
     print("pool created")
